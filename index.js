@@ -59,6 +59,38 @@ async function run() {
             res.send(result)
         })
 
+        // delete a todo route
+        app.delete('/allTodo/:id',async(req,res)=>{
+            const id=req.params.id;
+            const query={_id:new ObjectId(id)}
+            const result=await todoItems.deleteOne(query)
+            res.send(result)
+          })
+
+// get a specific task 
+          app.get('/allTodo/new/:id',async(req,res)=>{
+            const id=req.params.id;
+            const query={_id:new ObjectId(id)}
+            const result=await todoItems.findOne(query)
+            res.send(result)
+          })
+
+        //   update a task
+        app.patch('/allTodo/v1/v2/:id',async(req,res)=>{
+            const item=req.body;
+            const id=req.params.id;
+            const filter={_id: new ObjectId(id)}
+            const updatedDoc={
+              $set:{
+                name:item.name,
+                type:item.type,
+                typePrior:item.typePrior
+              }
+            }
+            const result=await todoItems.updateOne(filter,updatedDoc)
+            res.send(result)
+          })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
